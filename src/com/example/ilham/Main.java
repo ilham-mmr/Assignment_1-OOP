@@ -1,5 +1,10 @@
 package com.example.ilham;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+
 public class Main {
     /*
 
@@ -27,54 +32,77 @@ o	Sheep inherits properties from Mammal while Shark and Frog inherits properties
 
      */
 
+
+
     public static void main(String[] args) {
+        List<Animal> animals = new LinkedList<>();
 
-        //now we come to the interesting part
-        //if we instantiate the object shark and reference it to Animal
-        // we're limited to only accessing the superclass methods
+        Scanner scanner = new Scanner(System.in);
+        boolean exit = true;
+        while (exit){
+            System.out.println("Choose what animal you would  like to create[write down the word]: " +
+                    "\n choose 1. Shark" +
+                    "\n choose 2. Frog" +
+                    "\n choose 3. Sheep");
+            System.out.print("your answer:");
+
+        String userInput = scanner.nextLine().toLowerCase();
+        System.out.print("What is its name?");
+        String nameInput = scanner.nextLine().toLowerCase();
+        System.out.print("How much does it weigh?");
+        double weightInput = scanner.nextDouble();
+        scanner.nextLine();
+        Animal myAnimal = null;
+        switch (userInput) {
+            case "shark":
+            case "sheep":
+            case "frog":
+                myAnimal = createAnAnimal(userInput, nameInput, weightInput);
+                break;
+            default:
+                System.err.println("wrong input");
+        }
+
+        animals.add(myAnimal);
+        System.out.print("would you like to exit?[y/n]");
+        String userExits = scanner.nextLine();
+        if(userExits.equalsIgnoreCase("y")){
+            exit = false;
+        }
+    }
 
 
-        Animal jaws = new Shark("Jaws",90); // this is called upcasting. the superclass as reference.
-        System.out.println("shark's name: "+jaws.getName());
-        jaws.move();
-        jaws.breath();
-        jaws.sound();
-        jaws.reproduce();
-        jaws.eat();
-        System.out.println("-----------------------------------------------");
-        // jaws.setTeeth(); this one shows error
-        // but if we change the reference to the shark itself, we can freely access it
-        Shark newJaws = (Shark) jaws; //this is called downcasting.
-        //now after we cast it, we can access the methods that are not created on super class.
-        newJaws.setTeeth(300);
-        System.out.println(newJaws.getTeeth());
+        Iterator iterator = animals.listIterator();
+        System.out.println("Animal list:");
+        while(iterator.hasNext()){
 
+            Animal animal = (Animal) iterator.next();
+            System.out.println("++++++++"+animal.getName()+"++++++++++");
+            animal.eat();
+            animal.reproduce();
+            animal.move();
+            animal.sound();
+            animal.breath();
+            if(iterator.hasNext()) {
+                System.out.println("__________Next Animal______________\n");
+            }
+        }
 
-        System.out.println("________________________________________________");
+    }
 
+    public static Animal createAnAnimal(String animalType,String name, double weight){
+        Animal myAnimal;
+        if(animalType.equalsIgnoreCase("shark")){
+            myAnimal = new Shark(name,weight);
+            System.out.println(name+ " has been created");
+        }else if(animalType.equalsIgnoreCase("sheep")){
+            myAnimal = new Sheep(name,weight);
+            System.out.println(name+ " has been created");
+        }else{
+            myAnimal = new Frog(name,weight);
+            System.out.println(name+ " has been created");
+        }
 
-	    Frog darwin = new Frog("Darwin",0.2);
-        System.out.println();
-        System.out.println("Frog's name:"+darwin.getName());
-        darwin.move();
-        darwin.breath();
-        darwin.sound();
-        darwin.reproduce();
-        darwin.eat();
-        //below shows the use of method overloading
-        darwin.setSkinColor("Green");//set the value
-        darwin.setSkinColor("Red",35);
-        // get the value
-        System.out.println(darwin.getSkinColor());
-
-        System.out.println("________________________________________________");
-        Animal shaunTheSheep = new Sheep("Shaun The Sheep",45);
-        System.out.println("Sheep's name: "+shaunTheSheep.getName());
-        shaunTheSheep.move();
-        shaunTheSheep.breath();
-        shaunTheSheep.sound();
-        shaunTheSheep.reproduce();
-        shaunTheSheep.eat();
-
+        return myAnimal;
     }
 }
